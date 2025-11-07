@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import User from "../models/user.model.js";
 import { generateToken } from "../lib/utils.js";
+import cloudinary from "../lib/cloudinary.js";
 
 async function signup(req, res) {
 	const { fullName, email, password } = req.body;
@@ -43,7 +44,68 @@ async function signup(req, res) {
 	} catch (err) {}
 }
 
-async function login(req, res) {}
-async function logout(req, res) {}
+async function login(req, res) {
+	const { email, password } = req.body;
 
-export { signup, login, logout };
+	try {
+		const user = await User.findOne({ email });
+		if (!user) {
+			return res.status(400).json({ message: "Invalid credentials" });
+		}
+
+		const isPasswordCorrect = await bcrypt.compare(password, user.password);
+		if (!isPasswordCorrect) {
+			return res.status(400).json({ message: "Invalid credentials" });
+		}
+
+		generateToken(user._id, res);
+		res.status(200).json({ message: "Login successful", user });
+	} catch (err) {
+		res.status(500).json({ message: "Internal Server Error" });
+	}
+}
+
+function logout(req, res) {
+	try {
+		res.cookie("token", "", {
+			maxAge: 0,
+		});
+		res.status(200).json({ message: "Logout successful" });
+	} catch (err) {
+		res.status(500).json({ message: "Internal Server Error" });
+	}
+}
+
+async function updateProfile(req, res) {
+	try {
+		const { profilePicture } = req.body;
+		const userId = req.user._id;
+		if (!profilePicture) {
+			return res.status(400).json({ message: "Profile picture is required" });
+		}
+		const uplaodResult = await cloudinary.uploader.upload(profilePicture);
+		const updatedUser = await User.findByIdAndUpdate(
+			userId,
+			{
+				profilePicture: uplaodResult.secure_url,
+			},
+			{ new: true }
+		);
+		res
+			.status(200)
+			.json({ message: "Profile updated successfully", user: updatedUser });
+	} catch (err) {
+		res.status(500).json({ message: "Internal Server Error" });
+	}
+}
+
+function checkAuth(req, res) {
+	try {
+		res.status(200).json(req.user);
+	} catch (err) {
+		console.log(`Error in check auth controller ${err.message}`);
+		res.status(500).json({ message: "Internal Server Error" });
+	}
+}
+
+export { signup, login, logout, updateProfile, checkAuth };
