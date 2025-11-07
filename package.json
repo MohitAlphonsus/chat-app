@@ -1,0 +1,13 @@
+{
+	"name": "chat-app",
+	"version": "1.0.0",
+	"description": "Real-time chat app built with React, Node.js, Express, MongoDB, and Socket.io",
+	"main": "index.js",
+	"scripts": {
+		"build": "",
+		"start": ""
+	},
+	"keywords": [],
+	"author": "Mohit Alphonsus",
+	"license": "ISC"
+}
