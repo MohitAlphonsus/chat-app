@@ -1,6 +1,8 @@
 import express from "express";
 import connectDatabse from "./lib/db.js";
 import authRouter from "./routes/auth.route.js";
+import messageRouter from "./routes/message.route.js";
+
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 dotenv.config();
@@ -14,6 +16,7 @@ app.use(cookieParser());
 
 // Routes
 app.use("/api/auth", authRouter);
+app.use("/api/message", messageRouter);
 
 // Server
 async function createServer() {
