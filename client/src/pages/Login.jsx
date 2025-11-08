@@ -117,8 +117,8 @@ export default function Login() {
 					<div className="text-center">
 						<p className="text-base-content/60">
 							Don't have an account?{" "}
-							<Link to="/login" className="link link-hover link-primary">
-								Log In
+							<Link to="/signup" className="link link-hover link-primary">
+								Sign Up
 							</Link>
 						</p>
 					</div>

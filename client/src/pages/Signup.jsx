@@ -56,7 +56,7 @@ export default function Signup() {
 					<form className="space-y-6" onSubmit={handleSubmit}>
 						<div className="form-control">
 							<label className="label">
-								<span className="label-text font-medium mb-2">Full Name</span>
+								<span className="label-text font-medium mb-1">Full Name</span>
 							</label>
 
 							<label className="input input-bordered flex items-center gap-2 w-full">

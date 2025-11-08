@@ -15,7 +15,11 @@ const useAuthStore = create((set) => ({
 			const response = await axiosClient.get("/auth/check");
 			set({ authUser: response.data });
 		} catch (err) {
-			console.log(`Error in checkAuth ${err}`);
+			const message =
+				err.response?.data?.message ||
+				err.message ||
+				"Unable to connect to server";
+			console.log(`Check auth failed: ${message}`);
 			set({ authUser: null });
 		} finally {
 			set({ isCheckingAuth: false });

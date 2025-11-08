@@ -5,9 +5,11 @@ import { Navbar } from "./components";
 import { Loader } from "lucide-react";
 
 import { useAuthStore } from "./store/useAuthStore";
+import { useThemeStore } from "./store/useThemeStore";
 import { Toaster } from "react-hot-toast";
 export default function App() {
 	const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
+	const { chatTheme } = useThemeStore();
 
 	useEffect(
 		function () {
@@ -24,7 +26,7 @@ export default function App() {
 		);
 
 	return (
-		<>
+		<div data-theme={chatTheme}>
 			<BrowserRouter>
 				<Navbar />
 				<Routes>
@@ -49,6 +51,6 @@ export default function App() {
 			</BrowserRouter>
 
 			<Toaster />
-		</>
+		</div>
 	);
 }
