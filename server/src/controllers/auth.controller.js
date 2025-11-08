@@ -83,11 +83,11 @@ async function updateProfile(req, res) {
 		if (!profilePicture) {
 			return res.status(400).json({ message: "Profile picture is required" });
 		}
-		const uplaodResult = await cloudinary.uploader.upload(profilePicture);
+		const uploadResult = await cloudinary.uploader.upload(profilePicture);
 		const updatedUser = await User.findByIdAndUpdate(
 			userId,
 			{
-				profilePicture: uplaodResult.secure_url,
+				profilePicture: uploadResult.secure_url,
 			},
 			{ new: true }
 		);
@@ -95,7 +95,8 @@ async function updateProfile(req, res) {
 			.status(200)
 			.json({ message: "Profile updated successfully", user: updatedUser });
 	} catch (err) {
-		res.status(500).json({ message: "Internal Server Error" });
+		console.error("Cloudinary upload error:", err);
+		res.status(500).json({ message: err.message || "Internal Server Error" });
 	}
 }
 
