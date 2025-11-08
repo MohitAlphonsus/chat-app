@@ -5,6 +5,7 @@ import { Navbar } from "./components";
 import { Loader } from "lucide-react";
 
 import { useAuthStore } from "./store/useAuthStore";
+import { Toaster } from "react-hot-toast";
 export default function App() {
 	const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
 
@@ -14,8 +15,6 @@ export default function App() {
 		},
 		[checkAuth]
 	);
-
-	console.log(authUser);
 
 	if (isCheckingAuth && !authUser)
 		return (
@@ -48,6 +47,8 @@ export default function App() {
 					<Route path="/settings" element={<Settings />} />
 				</Routes>
 			</BrowserRouter>
+
+			<Toaster />
 		</>
 	);
 }
