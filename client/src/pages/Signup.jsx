@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import { AuthImagePattern, Logo } from "../components";
 import { User, Mail, Lock, Eye, EyeOff, LoaderCircle } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
+import { toast } from "react-hot-toast";
 
 export default function Signup() {
 	const [formData, setFormData] = useState({
@@ -11,11 +12,32 @@ export default function Signup() {
 		password: "",
 	});
 	const [showPassword, setShowPassword] = useState(false);
-	const { isSigningUp } = useAuthStore();
+	const { isSigningUp, signup } = useAuthStore();
 
 	function handleChange(e) {
 		const { name, value } = e.target;
 		setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
+	}
+
+	function handleValidation() {
+		if (!formData.fullName.trim()) return toast.error("Full name is required");
+		if (!formData.email.trim()) return toast.error("Email is required");
+		if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email))
+			return toast.error("Invalid email format");
+		if (!formData.password.trim()) return toast.error("Password is required");
+		if (formData.password.length < 6)
+			return toast.error("Password must be at least 6 characters");
+
+		return true;
+	}
+
+	function handleSubmit(e) {
+		e.preventDefault();
+
+		const success = handleValidation();
+		if (success === true) {
+			signup(formData);
+		}
 	}
 
 	return (
@@ -31,7 +53,7 @@ export default function Signup() {
 							Get started with your free account
 						</p>
 					</div>
-					<form className="space-y-6">
+					<form className="space-y-6" onSubmit={handleSubmit}>
 						<div className="form-control">
 							<label className="label">
 								<span className="label-text font-medium mb-2">Full Name</span>
