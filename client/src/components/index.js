@@ -1,3 +1,4 @@
 import Navbar from "./Navbar";
-
-export { Navbar };
+import Logo from "./logo";
+import AuthImagePattern from "./AuthImagePattern";
+export { Navbar, Logo, AuthImagePattern };
