@@ -18,7 +18,7 @@ app.use(cookieParser());
 
 // Routes
 app.use("/api/auth", authRouter);
-app.use("/api/message", messageRouter);
+app.use("/api/messages", messageRouter);
 
 // Server
 async function createServer() {
