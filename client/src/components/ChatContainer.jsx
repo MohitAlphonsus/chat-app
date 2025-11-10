@@ -8,16 +8,25 @@ import placeholderAvatar from "../assets/profile.png";
 import { formatMessageTime } from "../lib/utils";
 
 export default function ChatContainer() {
-	const { messages, getMessages, isMessagesLoading, selectedUser } =
-		useChatStore();
+	const {
+		messages,
+		getMessages,
+		isMessagesLoading,
+		selectedUser,
+		subscribeToMessages,
+		unsubscribeToMessages,
+	} = useChatStore();
 	const { authUser } = useAuthStore();
 	const messageEndRef = useRef(null);
 
 	useEffect(
 		function () {
 			getMessages(selectedUser._id);
+			subscribeToMessages();
+
+			return () => unsubscribeToMessages();
 		},
-		[getMessages, selectedUser._id]
+		[getMessages, selectedUser._id, subscribeToMessages, unsubscribeToMessages]
 	);
 
 	useEffect(
@@ -29,7 +38,7 @@ export default function ChatContainer() {
 		[messages]
 	);
 
-	if (isMessagesLoading)
+	if (isMessagesLoading) {
 		return (
 			<div className="flex flex-col flex-1 overflow-auto">
 				<ChatHeader />
@@ -37,6 +46,8 @@ export default function ChatContainer() {
 				<MessageInput />
 			</div>
 		);
+	}
+
 	return (
 		<div className="flex-1 flex flex-col overflow-auto">
 			<ChatHeader />

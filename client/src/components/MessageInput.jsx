@@ -9,7 +9,19 @@ export default function MessageInput() {
 	const fileInputRef = useRef(null);
 	const { sendMessage } = useChatStore();
 
-	function handleImageChange() {}
+	function handleImageChange(e) {
+		const file = e.target.files[0];
+		if (!file.type.startsWith("image/")) {
+			toast.error("Please select an image file");
+			return;
+		}
+
+		const reader = new FileReader();
+		reader.onloadend = () => {
+			setImagePreview(reader.result);
+		};
+		reader.readAsDataURL(file);
+	}
 
 	function handleRemoveImage() {
 		setImagePreview(null);
@@ -19,12 +31,12 @@ export default function MessageInput() {
 	async function handleSendMessage(e) {
 		e.preventDefault();
 		if (!text.trim() && !imagePreview) return;
+		setText("");
+		setImagePreview(null);
+		if (fileInputRef.current) fileInputRef.current.value = "";
 
 		try {
 			await sendMessage({ text: text.trim(), image: imagePreview });
-			setText("");
-			setImagePreview(null);
-			if (fileInputRef.current) fileInputRef.current.value = "";
 		} catch (err) {
 			console.error("Error sending message:", err);
 		}
