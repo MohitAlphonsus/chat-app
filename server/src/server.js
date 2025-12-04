@@ -1,11 +1,13 @@
 import dotenv from "dotenv";
 import express from "express";
-import { app, server } from "./lib/socket.js";
+import { initSocket, server } from "./lib/socket.js";
 import connectDatabse from "./lib/db.js";
 import authRouter from "./routes/auth.route.js";
 import messageRouter from "./routes/message.route.js";
 import cors from "cors";
 import path from "path";
+
+const app = express();
 dotenv.config();
 
 import cookieParser from "cookie-parser";
@@ -28,6 +30,8 @@ if (process.env.NODE_ENV === "production") {
 		res.sendFile(path.resolve(__dirname, "../client", "dist", "index.html"));
 	});
 }
+
+initSocket(app);
 
 // Server
 async function createServer() {
