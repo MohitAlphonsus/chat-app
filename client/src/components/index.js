@@ -1,5 +1,5 @@
 import Navbar from "./Navbar";
-import Logo from "./logo";
+import Logo from "./Logo";
 import AuthImagePattern from "./AuthImagePattern";
 
 import Sidebar from "./Sidebar";
