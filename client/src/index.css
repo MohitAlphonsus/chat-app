@@ -2,3 +2,9 @@
 @plugin "daisyui" {
 	themes: all;
 }
+
+@layer base {
+	html {
+		scrollbar-width: none;
+	}
+}
