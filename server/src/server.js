@@ -17,16 +17,17 @@ app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 
+// Routes
+app.use("/api/auth", authRouter);
+app.use("/api/messages", messageRouter);
+
+// Production catch-all
 if (process.env.NODE_ENV === "production") {
 	app.use(express.static(path.join(__dirname, "../client/dist")));
 	app.get("*", (req, res) => {
 		res.sendFile(path.resolve(__dirname, "../client", "dist", "index.html"));
 	});
 }
-
-// Routes
-app.use("/api/auth", authRouter);
-app.use("/api/messages", messageRouter);
 
 // Server
 async function createServer() {
